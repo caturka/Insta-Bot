@@ -87,8 +87,8 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton("All Posts", callback_data=f"photos#{username}"),
-                        InlineKeyboardButton("Others", callback_data=f"video#{username}")
+                        InlineKeyboardButton("Pic+Videos", callback_data=f"photos#{username}"),
+                        InlineKeyboardButton("ALL Posts", callback_data=f"video#{username}")
                     ]
                 ]
             )
@@ -134,12 +134,11 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             "instaloader",
             "--no-metadata-json",
             "--no-compress-json",
-            "--no-profile-pic",
-            "--no-pictures",
-            "--no-videos",
+            #"--no-profile-pic",
+            #"--no-pictures",
+            #"--no-videos",
             "--igtv",
             "--highlights",
-            "--stories",
             "--no-captions",
             "--no-video-thumbnails",
             "--filename-pattern={profile}_UTC_{date_utc}",
