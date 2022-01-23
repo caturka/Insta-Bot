@@ -36,7 +36,7 @@ drive = GoogleDrive(gauth)
             break'''
 
 #NewCode Which Check And Overwrite files
-#dir = '' #test Dir For test purpose..!
+#dir = '' #Dir For test purpose..!
 
 def gup(dir):
     
