@@ -7,7 +7,7 @@ import os
 gauth = GoogleAuth()
 drive = GoogleDrive(gauth)
 
-#Old Code Upload the files Without checking  for old Files in gdrive
+#Old Code Upload the files Without checking  for old Files in gdrive dead
 '''def gup(dir):
     gdriveid='1lgl0K453dJW7zkP8qzA_bEq925xwJN3J'
     directory = dir
