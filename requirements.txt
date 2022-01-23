@@ -1,0 +1,8 @@
+pyrogram
+tgcrypto
+instaloader
+pyromod
+pytz
+get-video-properties
+ffmpeg-python
+pydrive
