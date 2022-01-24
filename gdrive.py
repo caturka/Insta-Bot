@@ -1,4 +1,5 @@
 #import Modules
+from webbrowser import get
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
@@ -7,73 +8,84 @@ import os
 gauth = GoogleAuth()
 drive = GoogleDrive(gauth)
 
-#New Function  Which Check And Overwrite files
-#dir = '' #Dir For test purpose..!
+#gdrive function
+
+#dir = '' #Dir For debug purpose..!
 
 def gup(dir):
+
+    #Main gfolder id where store all the ig profile archive 
+    gFolderID='1lgl0K453dJW7zkP8qzA_bEq925xwJN3J' #Gdrive Folder id to store all the user posts conatining files  Folder
+    directory = dir #Route the main dir to function directory variables
     
-    gFolderID='1lgl0K453dJW7zkP8qzA_bEq925xwJN3J' #gdrive Folder id to store all the user posts conatining files  Folder
-    directory = dir
-   
     #Getting Gdrive Details
-    folder_metadata = {'title' : dir,"parents":  [{"id": gFolderID}], 'mimeType' : 'application/vnd.google-apps.folder'} #create folder for the dir in Given gFolderID with Given Tittle dir
-    gListFolderstr = "\'" + gFolderID + "\'" + " in parents and trashed=false" #get list the Files in Given gUserFolderID 
-    gfile_list = drive.ListFile({'q': gListFolderstr}).GetList()#list the Files using gListFolderstr
-     
-    #intial check Whether the user dir is already present.
-    for glistfile in gfile_list: #list and store  files inglistfile to get title or id
-        print("All Folder Title in Given GDrive Folder ID:",glistfile['title'])
+    gListFolderstr = "\'" + gFolderID + "\'" + " in parents and trashed=false" #Get list the Files in Given gUserFolderID 
+    gfile_list = drive.ListFile({'q': gListFolderstr}).GetList() #List the Files using gListFolderstr
+    
 
-        #intial check Whether the user dir is already present.  
-        if glistfile ['title'] == folder_metadata['title']: #if the folder in gFolder Match With Folder_Metada folder (dir) title
-            matchedFolderID=glistfile['id'] #get the matched folder id
-            print(f'The matched Folder ID is: {matchedFolderID}')
+    #Get All the folder inside the given main gfolder  
+    try:
+        for glistfile in gfile_list: #List and store  files in glistfile to get title or id
+            print("All Folder Title in Given GDrive Folder ID:",glistfile['title'])
+            if glistfile['title'] == dir: #Intial check Whether the user dir is already present.
+                FolderID = glistfile ['id'] #Store already presented user gfolder id
+                Foldername = glistfile ['title'] #Store already presented user gfolder title
+                break 
+    except:
+        pass
 
-            #compare files in matchFolderId with Local Files
-            gcmpListFolderstr = "\'" +  matchedFolderID + "\'" + " in parents and trashed=false" #get list the Files in Given MatchedFolderID
-            gcmpfile_list = drive.ListFile({'q': gcmpListFolderstr}).GetList()#list the Files using gListFolderstr
+    #set folder variables
+    matchedFolderID = FolderID #Store already presented user gfolder id to the matchedFolderID
+    matchedFoldername = Foldername #Store already presented user gfolder title to matchedFoldername
+    
+    #upload section
+    if matchedFoldername == dir: #validate Again
+        print(f'The matched Folder is: {matchedFoldername} : {matchedFolderID}')
+
+        #compare files in matchFolderId with Local Files
+        gcmpListFolderstr = "\'" +  matchedFolderID + "\'" + " in parents and trashed=false" #get list the Files in Given MatchedFolderID
+        gcmpfile_list = drive.ListFile({'q': gcmpListFolderstr}).GetList()#list the Files using gListFolderstr
+        
+        #get list Of Files in both Dir
+        for gfilelist in gcmpfile_list: 
+            print("The Matched Drive File list are:", gfilelist['title']) #list files in Gdrive dir in gfilelist
+        for localfilelist in os.listdir(directory): #list files in Local dir 
+            print("The Matched Local Dir File list are:", localfilelist)
             
-            #get list Of Files in Dir
-            for gfilelist in gcmpfile_list: 
-                print("The GDrive File list are:", gfilelist['title']) #list  files in Gdrive dir in gfilelist
-            for localfilelist in os.listdir(directory):
-                print("The Local Dir File list are:", localfilelist)
-                
-                #overwrite the files if Exists
-                try:
-                    for file1 in gcmpfile_list:
-                        if file1['title'] == localfilelist:
-                            file1.Delete()
-                            print(f'File is Successfully deleted')                                  
-                except:
-                    pass
-                
-            #Upload the Overwritten Files
-                #for localfilelist in os.listdir(directory):
-                filename = os.path.join(directory, localfilelist)
-                gfile = drive.CreateFile({'parents' : [{'id' : matchedFolderID}], 'title' : localfilelist})
-                gfile.SetContentFile(filename)
-                gfile.Upload()
-                print(f'File {localfilelist} is Successfully Uploaded') 
-            break
+            #overwrite the files if Exists by deletin existing file
+            try:
+                for file1 in gcmpfile_list:
+                    if file1['title'] == localfilelist:
+                        tfile = file1['title']
+                        file1.Delete()
+                        print(f'File {tfile} is Successfully deleted')                                  
+            except:
+                pass
             
-            #Else part To Create New Folder And Store Files...!
-        else:
-                #Get folder info and print to screen
-                gFolderCreate = drive.CreateFile(folder_metadata)
-                gFolderCreate.Upload()
-                newgFolderID = gFolderCreate['id']
-                print(gFolderCreate['title'] ," -->Successfully created")
+        #Upload the Deleted Files
+            filename = os.path.join(directory, localfilelist) #filename allocation
+            gfile = drive.CreateFile({'parents' : [{'id' : matchedFolderID}], 'title' : localfilelist}) #where the files will be uploaded
+            gfile.SetContentFile(filename) #set gfilename 
+            gfile.Upload() #upload
+            print(f'File {localfilelist} is Successfully Uploaded') 
 
-                for localfilelist in os.listdir(directory):
-                    filename = os.path.join(directory, localfilelist)
-                    gfile = drive.CreateFile({'parents' : [{'id' : newgFolderID}], 'title' : localfilelist})
-                    gfile.SetContentFile(filename)
-                    gfile.Upload()
-                    print(f'File {localfilelist} is Successfully Uploaded') 
+    #Else part To Create New GFolde for the Dir And Upload the Files...!
+    else:
+        #Create folder for the title dir 
+        folder_metadata = {'title' : dir,"parents":  [{"id": gFolderID}], 'mimeType' : 'application/vnd.google-apps.folder'} #meta data for gfolder
+        gFolderCreate = drive.CreateFile(folder_metadata) #set gfolderename
+        gFolderCreate.Upload() #upload
+        
+        #Get new folder id
+        newgFolderID = gFolderCreate['id']
+        print(gFolderCreate['title'] ," -->Successfully created")
 
-                print("All Files was Successfully Uploaded")
+        #Upload all the new files to the newly created gfolder
+        for localfilelist in os.listdir(directory):
+            filename = os.path.join(directory, localfilelist) #filename allocation
+            gfile = drive.CreateFile({'parents' : [{'id' : newgFolderID}], 'title' : localfilelist}) #where the files will be uploaded
+            gfile.SetContentFile(filename) #set gfilename
+            gfile.Upload() #upload
+            print(f'File {localfilelist} is Successfully Uploaded') 
+        print("All Files was Successfully Uploaded")
 
-                break
-
-#End of New Code
