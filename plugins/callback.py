@@ -120,6 +120,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         await download_insta(command, m, dir)
         chat_id=query.from_user.id
         # Upload files
+        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
         gup(dir)
         await upload(m, bot, chat_id, dir)
     
@@ -154,6 +155,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         subdir= f"{query.from_user.id}/{username}/{username}"
         rmv(subdir)
         time.sleep(3)
+        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
         gup(dir)
         await upload(m, bot, chat_id, dir)
 
@@ -195,6 +197,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             ]
         await download_insta(command, m, dir)
         chat_id=query.from_user.id
+        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
         gup(dir)
         await upload(m, bot, chat_id, dir)
 
@@ -369,5 +372,6 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             await download_insta(command, m, dir)
             subdir= f"{query.from_user.id}/{username}/{username}"
             rmv(subdir)
+        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
         gup(dir)
         await upload(m, bot, chat_id, dir)

@@ -400,6 +400,7 @@ async def feed(bot, message):
             ]
 
     await download_insta(command, m, dir)
+    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
     gup(dir)
     await upload(m, bot, chat_id, dir)
 
@@ -458,6 +459,7 @@ async def saved(bot, message):
             ":saved"
             ]
     await download_insta(command, m, dir)
+    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
     gup(dir)
     await upload(m, bot, chat_id, dir)
 
@@ -506,6 +508,7 @@ async def tagged(bot, message):
         "--", username
         ]
     await download_insta(command, m, dir)
+    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
     gup(dir)
     await upload(m, bot, chat_id, dir)
 
@@ -553,6 +556,7 @@ async def story(bot, message):
         "--", username
         ]
     await download_insta(command, m, dir)
+    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
     gup(dir)
     await upload(m, bot, chat_id, dir)
 
@@ -590,6 +594,7 @@ async def stories(bot, message):
         ":stories"
         ]
     await download_insta(command, m, dir)
+    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
     gup(dir)
     await upload(m, bot, chat_id, dir)
 
@@ -640,6 +645,7 @@ async def highlights(bot, message):
     await download_insta(command, m, dir)
     subdir= f"{chat_id}/{username}/{username}"
     rmv(subdir)
+    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
     gup(dir)
     await upload(m, bot, chat_id, dir)
 
