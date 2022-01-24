@@ -139,6 +139,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             #"--no-videos",
             "--igtv",
             "--highlights",
+            "--stories",
             "--no-captions",
             "--no-video-thumbnails",
             "--filename-pattern={profile}_UTC_{date_utc}",
