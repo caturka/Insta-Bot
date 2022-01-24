@@ -8,8 +8,25 @@ gauth = GoogleAuth()
 drive = GoogleDrive(gauth)
 
 
+<<<<<<< HEAD
 #Code Which Check And Overwrite files
 #dir = '' #test Dir For test purpose..!
+=======
+        else:
+            folder = drive.CreateFile(folder_metadata)
+            folder.Upload()
+            #Get folder info and print to screen
+            folder = folder['id']
+            for f in os.listdir(directory):
+                filename = os.path.join(directory, f)
+                gfile = drive.CreateFile({'parents' : [{'id' : folder}], 'title' : f})
+                gfile.SetContentFile(filename)
+                gfile.Upload()
+            break'''
+
+#NewCode Which Check And Overwrite files
+#dir = '' #Dir For test purpose..!
+>>>>>>> b7f53e8ca655ee7c6f49cd333e97a99844ea147b
 
 def gup(dir):
     
