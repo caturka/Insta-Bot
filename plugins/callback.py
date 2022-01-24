@@ -111,6 +111,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             #"--no-videos",
             "--no-captions",
             "--no-video-thumbnails",
+            "--filename-pattern={profile}_UTC_{date_utc}",
             "--login", USER,
             "-f", session,
             "--dirname-pattern", dir,
