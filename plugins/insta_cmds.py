@@ -91,8 +91,8 @@ async def post(bot, message):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton("Photos", callback_data=f"photos#{username}"),
-                        InlineKeyboardButton("Videos", callback_data=f"video#{username}")
+                        InlineKeyboardButton("Pic+Videos", callback_data=f"photos#{username}"),
+                        InlineKeyboardButton("ALL Posts", callback_data=f"video#{username}")
                     ]
                 ]
             )
@@ -400,9 +400,12 @@ async def feed(bot, message):
             ]
 
     await download_insta(command, m, dir)
+    # mod code
     await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
-    gup(dir)
+    gid = None
+    gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
+    await bot.send_message(chat_id,f'The Drive Link: {gid}')
 
 
 
@@ -459,9 +462,12 @@ async def saved(bot, message):
             ":saved"
             ]
     await download_insta(command, m, dir)
+    # mod code
     await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
-    gup(dir)
+    gid = None
+    gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
+    await bot.send_message(chat_id,f'The Drive Link: {gid}')
 
 
 
@@ -508,9 +514,13 @@ async def tagged(bot, message):
         "--", username
         ]
     await download_insta(command, m, dir)
+    # mod code
     await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
-    gup(dir)
+    gid = None
+    gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
+    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+
 
 
 
@@ -556,9 +566,13 @@ async def story(bot, message):
         "--", username
         ]
     await download_insta(command, m, dir)
+    # mod code
     await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
-    gup(dir)
+    gid = None
+    gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
+    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+
 
 
 
@@ -594,9 +608,13 @@ async def stories(bot, message):
         ":stories"
         ]
     await download_insta(command, m, dir)
+    # mod code
     await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
-    gup(dir)
+    gid = None
+    gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
+    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+
 
 
 
@@ -643,9 +661,11 @@ async def highlights(bot, message):
         "--", username
         ]
     await download_insta(command, m, dir)
+    # mod code
     subdir= f"{chat_id}/{username}/{username}"
     rmv(subdir)
     await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
-    gup(dir)
+    gid = None
+    gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
-
+    await bot.send_message(chat_id,f'The Drive Link: {gid}')

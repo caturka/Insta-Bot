@@ -1,5 +1,4 @@
 #import Modules
-from webbrowser import get
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
@@ -10,9 +9,7 @@ drive = GoogleDrive(gauth)
 
 #gdrive function
 
-#dir = '' #Dir For debug purpose..!
-
-def gup(dir):
+def gup(dir,gid):
 
     #Main gfolder id where store all the ig profile archive 
     gFolderID='1lgl0K453dJW7zkP8qzA_bEq925xwJN3J' #Gdrive Folder id to store all the user posts conatining files  Folder
@@ -28,20 +25,24 @@ def gup(dir):
         for glistfile in gfile_list: #List and store  files in glistfile to get title or id
             print("All Folder Title in Given GDrive Folder ID:",glistfile['title'])
             if glistfile['title'] == dir: #Intial check Whether the user dir is already present.
-                FolderID = glistfile ['id'] #Store already presented user gfolder id
-                Foldername = glistfile ['title'] #Store already presented user gfolder title
+                folderid = glistfile ['id'] #Store already presented user gfolder id
+                foldername = glistfile ['title'] #Store already presented user gfolder title
                 break 
+            else:
+                folderid = None
+                foldername = None
     except:
         pass
 
     #set folder variables
-    matchedFolderID = FolderID #Store already presented user gfolder id to the matchedFolderID
-    matchedFoldername = Foldername #Store already presented user gfolder title to matchedFoldername
+    matchedFolderID = folderid #Store already presented user gfolder id to the matchedFolderID
+    matchedFoldername = foldername #Store already presented user gfolder title to matchedFoldername
     
     #upload section
     if matchedFoldername == dir: #validate Again
         print(f'The matched Folder is: {matchedFoldername} : {matchedFolderID}')
-
+        
+        
         #compare files in matchFolderId with Local Files
         gcmpListFolderstr = "\'" +  matchedFolderID + "\'" + " in parents and trashed=false" #get list the Files in Given MatchedFolderID
         gcmpfile_list = drive.ListFile({'q': gcmpListFolderstr}).GetList()#list the Files using gListFolderstr
@@ -68,7 +69,8 @@ def gup(dir):
             gfile.SetContentFile(filename) #set gfilename 
             gfile.Upload() #upload
             print(f'File {localfilelist} is Successfully Uploaded') 
-
+        gid = (f'https://drive.google.com/drive/u/1/folders/{matchedFolderID}')
+        return gid
     #Else part To Create New GFolde for the Dir And Upload the Files...!
     else:
         #Create folder for the title dir 
@@ -88,4 +90,8 @@ def gup(dir):
             gfile.Upload() #upload
             print(f'File {localfilelist} is Successfully Uploaded') 
         print("All Files was Successfully Uploaded")
+        gid = (f'https://drive.google.com/drive/u/1/folders/{newgFolderID}')
+        return gid
 
+#dir = '' #Dir For debug purpose..!
+#gid =  #gfolderid for test purose

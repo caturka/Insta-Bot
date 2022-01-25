@@ -30,7 +30,7 @@ import os
 from instaloader import Profile
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong
 import time
-from gdrive import gup
+from gdrive import *
 
 
 
@@ -119,10 +119,12 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             ]
         await download_insta(command, m, dir)
         chat_id=query.from_user.id
-        # Upload files
+        # mod code
         await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
-        gup(dir)
+        gid = None
+        gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
+        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
     
 
 
@@ -152,12 +154,15 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             ]
         await download_insta(command, m, dir)
         chat_id=query.from_user.id
+        # mod code
         subdir= f"{query.from_user.id}/{username}/{username}"
         rmv(subdir)
         time.sleep(3)
         await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
-        gup(dir)
+        gid = None
+        gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
+        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
 
     elif query.data.startswith("igtv"):
         await query.message.delete()
@@ -197,9 +202,12 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             ]
         await download_insta(command, m, dir)
         chat_id=query.from_user.id
+        # mod code
         await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
-        gup(dir)
+        gid = None
+        gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
+        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
 
 
 
@@ -370,8 +378,13 @@ async def cb_handler(bot: Client, query: CallbackQuery):
                 "--", username
                 ]
             await download_insta(command, m, dir)
+            # mod code
             subdir= f"{query.from_user.id}/{username}/{username}"
             rmv(subdir)
         await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
-        gup(dir)
+        gid = None
+        gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
+        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
+
+
