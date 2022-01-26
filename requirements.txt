@@ -6,4 +6,3 @@ pytz
 get-video-properties
 ffmpeg-python
 pydrive
-pathlib
