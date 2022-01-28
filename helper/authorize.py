@@ -14,7 +14,7 @@ class Auth_user:
         except:
             pass
 
-#GROUP AUTH
+#GROUP chat AUTH
 class Auth_chat:
 
     def search_chat(chatid):
