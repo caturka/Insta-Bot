@@ -28,11 +28,11 @@
       },
       "GROUP_ID": {
         "description": "Enter Your Athorized Group's id. seperate by comma",
-        "value":[]
+        "value":""
       },
       "AUTH_USER": {
         "description":"Enter the Sudo users id. seperate by comma",
-        "value":[]
+        "value":""
       },
       "INSTAGRAM_USERNAME": {
         "description": "Enter your Instagram Username without @ , Example: samantharuthprabhuoffl",

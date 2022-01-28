@@ -1,14 +1,15 @@
-
 from config import Config
-
+import ast
 class Auth_user:
     
     def search_auth(authid):
-        auth_list=Config.AUTH
+        AUTH = [Config.AUTH]
+        a ='[%s]' % ', '.join(map(str, AUTH))
+        AUTH = ast.literal_eval(a)
         default = Config.OWNER
         try:
-            for id in range(len(auth_list)):
-                if auth_list[id] == authid:
+            for id in range(len(AUTH)):
+                if AUTH[id] == authid:
                     return str(authid)
             return str(default)
         except:
@@ -18,13 +19,14 @@ class Auth_user:
 class Auth_chat:
 
     def search_chat(chatid):
-        group_list = Config.GROUP
+        GROUP = [Config.GROUP]
+        a ='[%s]' % ', '.join(map(str, GROUP))
+        GROUP = ast.literal_eval(a)
         default=-1001192804366
         try:
-            for id in range(len(group_list)):
-                if group_list[id] == chatid:
+            for id in range(len(GROUP)):
+                if GROUP[id] == chatid:
                     return str(chatid)  
             return str(default)     
         except:
            pass 
-

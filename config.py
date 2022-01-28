@@ -6,7 +6,7 @@ class Config:
     API_HASH = os.environ.get("API_HASH", "")
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "") 
     USER = os.environ.get("INSTAGRAM_USERNAME", "")
-    GROUP= os.environ.get("GROUP_ID", [])
+    GROUP= os.environ.get("GROUP_ID", "")
     AUTH = os.environ.get("AUTH_USER", "")
     OWNER = os.environ.get("OWNER_ID", "")
     DRIVE= os.environ.get("DRIVE_ID", "")
