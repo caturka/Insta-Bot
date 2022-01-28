@@ -2,7 +2,8 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
-
+from config import Config
+DRIVE=Config.DRIVE
 #Route the modules
 gauth = GoogleAuth()
 drive = GoogleDrive(gauth)
@@ -12,7 +13,7 @@ drive = GoogleDrive(gauth)
 def gup(dir,gid):
 
     #Main gfolder id where store all the ig profile archive 
-    gFolderID='1lgl0K453dJW7zkP8qzA_bEq925xwJN3J' #Gdrive Folder id to store all the user posts conatining files  Folder
+    gFolderID= DRIVE#Gdrive Folder id to store all the user posts conatining files  Folder
     directory = dir #Route the main dir to function directory variables
     
     #Getting Gdrive Details

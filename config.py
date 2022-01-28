@@ -1,11 +1,16 @@
 import os
 from instaloader import Instaloader
+
+
 class Config:
     API_ID = int(os.environ.get("API_ID", "3544387"))
     API_HASH = os.environ.get("API_HASH", "fbd3a125cd615e8bcb680718bfdbe528")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "1958306897:AAEUQ7NzE_GEPSulz7TokxWO7MzD95l7uiU") 
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "1958306897:AAHTKYmipeugow847DEeLIJiFf9vtZs-sC0") 
     USER = os.environ.get("INSTAGRAM_USERNAME", "")
-    OWNER = os.environ.get("OWNER_ID", "1802509578")
+    GROUP= os.environ.get("GROUP_ID", "")
+    AUTH = os.environ.get("AUTH_USER", "")
+    OWNER = os.environ.get("OWNER_ID", "")
+    DRIVE= os.environ.get("DRIVE_ID", "")
     INSTA_SESSIONFILE_ID = os.environ.get("INSTA_SESSIONFILE_ID", None)
     S = "0"
     STATUS = set(int(x) for x in (S).split())
@@ -97,12 +102,7 @@ Example: <code>/followers samantharuthprabhuoffl</code>
 """
     HOME_TEXT = """
 <b>Helo, [{}](tg://user?id={})
-
-This is a bot of [{}](www.instagram.com/{}) to manage his Instagram account. 
-I can only work for my master [{}](tg://user?id={}).
-But you can Deploy the same bot for your use from the below source code.
-
-Use /help to know What I can Do?</b>
+I can only work for my master({Config.GOD_USER}).
 """
     HOME_TEXT_OWNER = """
 <b>Helo, [{}](tg://user?id={})
@@ -110,4 +110,3 @@ I am your assistant to manage your Instagram account.
 
 Use /help to know what I can do for you.</b>
 """
-

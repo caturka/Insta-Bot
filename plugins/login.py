@@ -1,38 +1,17 @@
-#MIT License
-
-#Copyright (c) 2021 subinps
-
-#Permission is hereby granted, free of charge, to any person obtaining a copy
-#of this software and associated documentation files (the "Software"), to deal
-#in the Software without restriction, including without limitation the rights
-#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-#copies of the Software, and to permit persons to whom the Software is
-#furnished to do so, subject to the following conditions:
-
-#The above copyright notice and this permission notice shall be included in all
-#copies or substantial portions of the Software.
-
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#SOFTWARE.
-
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import Client, filters
 from config import Config
-from utils import *
+from helper.tg_utils import *
 import os
 from instaloader import Profile, TwoFactorAuthRequiredException, BadCredentialsException
 from asyncio.exceptions import TimeoutError
-from gdrive import gup
+from helper.drive_utils.gdrive import *
+from helper.authorize import *
+
 USER=Config.USER
 STATUS=Config.STATUS
-OWNER=Config.OWNER
 HOME_TEXT=Config.HOME_TEXT
-
+OWNER=Config.OWNER
 insta = Config.L
 
 
@@ -46,14 +25,16 @@ async def login(bot, message):
 				[
 					[
 						InlineKeyboardButton("👨🏼‍💻Developer", url='https://t.me/subinps'),
-						InlineKeyboardButton("🤖Other Bots", url="https://t.me/subin_works/122")
+						InlineKeyboardButton("🤖Modder", url="https://t.me/query_realm"),
+                        
 					],
                     [
                         InlineKeyboardButton("🔗Source Code", url="https://github.com/subinps/Instagram-Bot"),
 						InlineKeyboardButton("🧩Deploy Own Bot", url="https://heroku.com/deploy?template=https://github.com/subinps/Instagram-Bot")
                     ],
                     [
-                        InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin")
+                        InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin"),
+                        InlineKeyboardButton("Want Modded Code", url="https://t.me/query_realm")
 
                     ]
 					
@@ -174,14 +155,16 @@ async def logout(bot, message):
 				[
 					[
 						InlineKeyboardButton("👨🏼‍💻Developer", url='https://t.me/subinps'),
-						InlineKeyboardButton("🤖Other Bots", url="https://t.me/subin_works/122")
+						InlineKeyboardButton("🤖Modder", url="https://t.me/query_realm"),
+                        
 					],
                     [
                         InlineKeyboardButton("🔗Source Code", url="https://github.com/subinps/Instagram-Bot"),
 						InlineKeyboardButton("🧩Deploy Own Bot", url="https://heroku.com/deploy?template=https://github.com/subinps/Instagram-Bot")
                     ],
                     [
-                        InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin")
+                        InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin"),
+                        InlineKeyboardButton("Want Modded Code", url="https://t.me/query_realm")
 
                     ]
 					

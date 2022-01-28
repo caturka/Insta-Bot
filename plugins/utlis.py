@@ -1,34 +1,16 @@
-#MIT License
-
-#Copyright (c) 2021 subinps
-
-#Permission is hereby granted, free of charge, to any person obtaining a copy
-#of this software and associated documentation files (the "Software"), to deal
-#in the Software without restriction, including without limitation the rights
-#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-#copies of the Software, and to permit persons to whom the Software is
-#furnished to do so, subject to the following conditions:
-
-#The above copyright notice and this permission notice shall be included in all
-#copies or substantial portions of the Software.
-
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#SOFTWARE.
-
 import re
 from config import Config
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from utils import *
+from helper.tg_utils import *
 from instaloader import Profile
-from gdrive import gup
+from helper.drive_utils.gdrive import *
+from helper.authorize import *
+
 USER=Config.USER
 OWNER=Config.OWNER
+GROUP=Config.GROUP
+AUTH=Config.AUTH
 HOME_TEXT=Config.HOME_TEXT
 HELP=Config.HELP
 session=f"./{USER}"
@@ -38,17 +20,20 @@ STATUS=Config.STATUS
 insta = Config.L
 
 
-@Client.on_message(filters.command("account") & filters.private)
+@Client.on_message(filters.command("account") & filters.group)
+
 async def account(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, int(OWNER)), 
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, int(GROUP)), 
 			disable_web_page_preview=True,
 			reply_markup=InlineKeyboardMarkup(
 				[
 					[
 						InlineKeyboardButton("👨🏼‍💻Developer", url='https://t.me/subinps'),
-						InlineKeyboardButton("🤖Other Bots", url="https://t.me/subin_works/122"),
+						InlineKeyboardButton("🤖Modder", url="https://t.me/query_realm"),
                         
 					],
                     [
@@ -57,7 +42,7 @@ async def account(bot, message):
                     ],
                     [
                         InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin"),
-                        InlineKeyboardButton("⚙️Update Channel", url="https://t.me/subin_works")
+                        InlineKeyboardButton("Want Modded Code", url="https://t.me/query_realm")
 
                     ]
 					
@@ -108,7 +93,7 @@ async def account(bot, message):
                 )
             await m.delete()
             await bot.send_photo(
-                        chat_id=message.from_user.id,
+                        chat_id = GROUP,
                         photo=profilepic,
                         caption=f"🏷 **Name**: {name}\n🔖 **Username**: {profile.username}\n📝**Bio**: {bio}\n📍 **Account Type**: {acc_type(profile.is_private)}\n🏭 **Is Business Account?**: {yes_or_no(profile.is_business_account)}\n👥 **Total Followers**: {followers}\n👥 **Total Following**: {following}\n📸 **Total Posts**: {mediacount}\n📺 **IGTV Videos**: {igtvcount}",
                         reply_markup=reply_markup
@@ -119,18 +104,20 @@ async def account(bot, message):
     else:
         await message.reply_text("You must login first by /login")
 
-
-@Client.on_message(filters.text & filters.private & filters.incoming)
-async def _insta_post_batch(bot, message):
-    if str(message.from_user.id) != OWNER:
+#get Ig user Data 
+@Client.on_message(filters.text &filters.incoming &filters.command("ig") & filters.group )
+async def ig(bot, message):
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, int(OWNER)),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, int(GROUP)),
 			disable_web_page_preview=True,
 			reply_markup=InlineKeyboardMarkup(
 				[
 					[
 						InlineKeyboardButton("👨🏼‍💻Developer", url='https://t.me/subinps'),
-						InlineKeyboardButton("🤖Other Bots", url="https://t.me/subin_works/122"),
+						InlineKeyboardButton("🤖Modder", url="https://t.me/query_realm"),
                         
 					],
                     [
@@ -139,7 +126,7 @@ async def _insta_post_batch(bot, message):
                     ],
                     [
                         InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin"),
-                        InlineKeyboardButton("⚙️Update Channel", url="https://t.me/subin_works")
+                        InlineKeyboardButton("Want Modded Code", url="https://t.me/query_realm")
 
                     ]
 					
@@ -151,8 +138,9 @@ async def _insta_post_batch(bot, message):
         await message.reply_text("You Must Login First /login ")
         return
     m = await message.reply_text("Fetching data from Instagram🔗")
-    chat_id= message.from_user.id
-    username=message.text
+    chat_id= GROUP
+    text = message.text
+    cmd, username = text.split(' ')
     if "https://instagram.com/stories/" in username:
         await m.edit("Stories from links are not yet supported🥴\n\nYou can download stories from Username.")
         return
@@ -175,7 +163,7 @@ async def _insta_post_batch(bot, message):
         try:
             userid=str(message.from_user.id)
             dir=f"{userid}/{shortcode}"
-            chat_id=message.from_user.id
+            chat_id= GROUP
             command = [
                 "instaloader",
                 "--no-metadata-json",
@@ -193,7 +181,7 @@ async def _insta_post_batch(bot, message):
             await upload(sent, bot, chat_id, dir)
         except Exception as e:
             print(e)
-            await bot.send_message(chat_id=message.from_user.id, text=e)
+            await bot.send_message(chat_id=GROUP, text=e)
             pass
     elif "https://" in username:
         await m.edit('Unsupported Format')
@@ -246,7 +234,7 @@ async def _insta_post_batch(bot, message):
             await m.delete()
             try:
                 await bot.send_photo(
-                    chat_id=chat_id,
+                    chat_id = GROUP,
                     photo=profilepic,
                     caption=f"🏷 **Name**: {name}\n🔖 **Username**: {profile.username}\n📝 **Bio**: {bio}\n📍 **Account Type**: {acc_type(profile.is_private)}\n🏭 **Is Business Account?**: {yes_or_no(profile.is_business_account)}\n👥 **Total Followers**: {followers}\n👥 **Total Following**: {following}\n**👤 Is {name} Following You?**: {is_following}\n**👤 Is You Following {name} **: {is_followed}\n📸 **Total Posts**: {mediacount}\n📺 **IGTV Videos**: {igtvcount}",
                     reply_markup=reply_markup

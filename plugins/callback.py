@@ -1,48 +1,29 @@
-#MIT License
-
-#Copyright (c) 2021 subinps
-
-#Permission is hereby granted, free of charge, to any person obtaining a copy
-#of this software and associated documentation files (the "Software"), to deal
-#in the Software without restriction, including without limitation the rights
-#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-#copies of the Software, and to permit persons to whom the Software is
-#furnished to do so, subject to the following conditions:
-
-#The above copyright notice and this permission notice shall be included in all
-#copies or substantial portions of the Software.
-
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#SOFTWARE.
-
-
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import Client, filters
 from config import Config
-from SubFolRmv import rmv
-from utils import *
+from helper.SubFolRmv import *
+from helper.tg_utils import *
 import os
 from instaloader import Profile
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong
 import time
-from gdrive import *
-
+from helper.drive_utils.gdrive import *
+from helper.authorize import *
 
 
 HELP=Config.HELP
 session=f"./{USER}"
-
+GROUP=Config.GROUP
 STATUS=Config.STATUS
+OWNER =Config.OWNER
+AUTH = Config.AUTH
 
 insta = Config.L
 
 @Client.on_callback_query()
+
 async def cb_handler(bot: Client, query: CallbackQuery):
+    GROUP = Auth_chat.search_chat(query.message.chat.id)
     cmd, username = query.data.split("#")
     profile = Profile.from_username(insta.context, username)
     mediacount = profile.mediacount
@@ -56,17 +37,23 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         await query.message.edit_text(
             HELP,
             reply_markup=InlineKeyboardMarkup(
-			[
 				[
-					InlineKeyboardButton("👨🏼‍💻Developer", url='https://t.me/subinps'),
-					InlineKeyboardButton("🤖Other Bots", url="https://t.me/subin_works/122"),
-                    InlineKeyboardButton("⚙️Update Channel", url="https://t.me/subin_works")
-				],
-				[
-					InlineKeyboardButton("🔗Source Code", url="https://github.com/subinps/Instagram-Bot"),
-					InlineKeyboardButton("🧩Deploy Own Bot", url="https://heroku.com/deploy?template=https://github.com/subinps/Instagram-Bot")
+					[
+						InlineKeyboardButton("👨🏼‍💻Developer", url='https://t.me/subinps'),
+						InlineKeyboardButton("🤖Modder", url="https://t.me/query_realm"),
+                        
+					],
+                    [
+                        InlineKeyboardButton("🔗Source Code", url="https://github.com/subinps/Instagram-Bot"),
+						InlineKeyboardButton("🧩Deploy Own Bot", url="https://heroku.com/deploy?template=https://github.com/subinps/Instagram-Bot")
+                    ],
+                    [
+                        InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin"),
+                        InlineKeyboardButton("Want Modded Code", url="https://t.me/query_realm")
+
+                    ]
+					
 				]
-			]
 			)
 		)
     
@@ -75,14 +62,14 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         profile = Profile.from_username(insta.context, username)
         profilepichd = profile.profile_pic_url
         await query.answer()
-        await bot.send_document(chat_id=query.from_user.id, document=profilepichd, file_name=f"{username}.jpg", force_document=True)
+        await bot.send_document(chat_id=query.message.chat.id, document=profilepichd, file_name=f"{username}.jpg", force_document=True)
     
     
    
     elif query.data.startswith("post"):
         await query.message.delete()
         await bot.send_message(
-            query.from_user.id,
+            GROUP,
             f"What type of post do you want to download?.",
             reply_markup=InlineKeyboardMarkup(
                 [
@@ -102,7 +89,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             await query.edit_message_text("There are no posts by the user")
             return
         m= await query.edit_message_text("Starting Downloading..\nThis may take time depending upon number of Posts.")      
-        dir=f"{query.from_user.id}/{username}"
+        dir=f"{OWNER}/{username}"
         command = [
             "instaloader",
             "--no-metadata-json",
@@ -118,13 +105,13 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             "--", username
             ]
         await download_insta(command, m, dir)
-        chat_id=query.from_user.id
+        chat_id = query.message.chat.id
         # mod code
-        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
+        await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
-        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
+        await bot.send_message(GROUP,f'The Drive Link: {gid}')
     
 
 
@@ -133,7 +120,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             await query.edit_message_text("There are no posts by the user")
             return
         m= await query.edit_message_text("Starting Downloading..\nThis may take longer time Depending upon number of posts.")    
-        dir=f"{query.from_user.id}/{username}"
+        dir=f"{OWNER}/{username}"
         command = [
             "instaloader",
             "--no-metadata-json",
@@ -153,21 +140,21 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             "--", username
             ]
         await download_insta(command, m, dir)
-        chat_id=query.from_user.id
+        chat_id=GROUP
         # mod code
-        subdir= f"{query.from_user.id}/{username}/{username}"
+        subdir= f"{OWNER}/{username}/{username}"
         rmv(subdir)
         time.sleep(3)
-        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
+        await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
-        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
+        await bot.send_message(GROUP,f'The Drive Link: {gid}')
 
     elif query.data.startswith("igtv"):
         await query.message.delete()
         await bot.send_message(
-            query.from_user.id,
+            GROUP,
             f"Do you Want to download all IGTV posts?\nThere are {igtvcount} posts.",
             reply_markup=InlineKeyboardMarkup(
                 [
@@ -183,7 +170,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             await query.edit_message_text("There are no IGTV posts by the user")
             return
         m= await query.edit_message_text("Starting Downloading..\nThis may take longer time Depending upon number of posts.")
-        dir=f"{query.from_user.id}/{username}"
+        dir=f"{OWNER}/{username}"
 
         command = [
             "instaloader",
@@ -201,19 +188,19 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             "--", username
             ]
         await download_insta(command, m, dir)
-        chat_id=query.from_user.id
+        chat_id=GROUP
         # mod code
-        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
+        await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
-        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
+        await bot.send_message(GROUP,f'The Drive Link: {gid}')
 
 
 
     elif query.data.startswith("followers"):
         await query.message.delete()
-        chat_id=query.from_user.id
+        chat_id=GROUP
         m=await bot.send_message(chat_id, f"Fetching Followers List of {name}")
         f = profile.get_followers()
         followers=f"**Followers List for {name}**\n\n"
@@ -239,7 +226,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
     
     elif query.data.startswith("followees"):
         await query.message.delete()
-        chat_id=query.from_user.id
+        chat_id=GROUP
         m=await bot.send_message(chat_id, f"Fetching Followees of {name}")
         
         f = profile.get_followees()
@@ -259,19 +246,12 @@ async def cb_handler(bot: Client, query: CallbackQuery):
             text_file.close()
             await bot.send_document(chat_id=chat_id, document=f"./{username}'s followees.txt", caption=f"{name}'s followees\n\nA Project By [XTZ_Bots](https://t.me/subin_works)")
             os.remove(f"./{username}'s followees.txt")
-
-
-
-
-
     elif query.data.startswith("no"):
         await query.message.delete()
     
-
-
     else:
-        dir=f"{query.from_user.id}/{username}"
-        chat_id=query.from_user.id   
+        dir=f"{OWNER}/{username}"
+        chat_id=GROUP   
         await query.message.delete()
         m= await bot.send_message(chat_id, "Starting Downloading..\nThis may take longer time Depending upon number of posts.") 
         cmd, username = query.data.split("#")   
@@ -379,12 +359,12 @@ async def cb_handler(bot: Client, query: CallbackQuery):
                 ]
             await download_insta(command, m, dir)
             # mod code
-            subdir= f"{query.from_user.id}/{username}/{username}"
+            subdir= f"{OWNER}/{username}/{username}"
             rmv(subdir)
-        await bot.send_message(query.from_user.id,f".Drive Upload Starts, Please Wait......",)
+        await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
         await upload(m, bot, chat_id, dir)
-        await bot.send_message(query.from_user.id,f'The Drive Link: {gid}')
+        await bot.send_message(GROUP,f'The Drive Link: {gid}')
 
 

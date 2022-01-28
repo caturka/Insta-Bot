@@ -1,52 +1,32 @@
-#MIT License
-
-#Copyright (c) 2021 subinps
-
-#Permission is hereby granted, free of charge, to any person obtaining a copy
-#of this software and associated documentation files (the "Software"), to deal
-#in the Software without restriction, including without limitation the rights
-#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-#copies of the Software, and to permit persons to whom the Software is
-#furnished to do so, subject to the following conditions:
-
-#The above copyright notice and this permission notice shall be included in all
-#copies or substantial portions of the Software.
-
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#SOFTWARE.
-
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import Client, filters
 from config import Config
 from instaloader import Profile
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong
 import os
-from utils import *
-from gdrive import gup
-
+from helper.tg_utils import *
+from helper.drive_utils.gdrive import *
+from helper.authorize import *
 import time 
-from SubFolRmv import rmv
+from helper.SubFolRmv import *
 
-
+AUTH=Config.AUTH
 USER=Config.USER
 OWNER=Config.OWNER
+GROUP=Config.GROUP
 HOME_TEXT_OWNER=Config.HOME_TEXT_OWNER
 HELP=Config.HELP
 HOME_TEXT=Config.HOME_TEXT
 session=f"./{USER}"
 STATUS=Config.STATUS
 
+
 insta = Config.L
 buttons=InlineKeyboardMarkup(
     [
         [
             InlineKeyboardButton("👨🏼‍💻Developer", url='https://t.me/subinps'),
-            InlineKeyboardButton("🤖Other Bots", url="https://t.me/subin_works/122")
+            InlineKeyboardButton("🤖Modder", url="https://t.me/query_realm")
         ],
         [
             InlineKeyboardButton("🔗Source Code", url="https://github.com/subinps/Instagram-Bot"),
@@ -54,7 +34,7 @@ buttons=InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton("👨🏼‍🦯How To Use?", callback_data="help#subin"),
-            InlineKeyboardButton("⚙️Update Channel", url="https://t.me/subin_works")
+            InlineKeyboardButton("Want Modded Code", url="https://t.me/query_realm")
         ]
 					
     ]
@@ -63,11 +43,13 @@ buttons=InlineKeyboardMarkup(
 
 
 
-@Client.on_message(filters.command("posts") & filters.private)
+@Client.on_message(filters.command("posts") & filters.group)
 async def post(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -86,7 +68,7 @@ async def post(bot, message):
             await message.reply_text("Sorry!\nI can't fetch details from that account.\nSince its a Private account and you are not following <code>@{username}</code>.")
             return
     await bot.send_message(
-            message.from_user.id,
+            GROUP,
             f"What type of post do you want to download?.",
             reply_markup=InlineKeyboardMarkup(
                 [
@@ -99,11 +81,13 @@ async def post(bot, message):
         )
     
 
-@Client.on_message(filters.command("igtv") & filters.private)
+@Client.on_message(filters.command("igtv") & filters.group)
 async def igtv(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -138,11 +122,13 @@ async def igtv(bot, message):
     
 
 
-@Client.on_message(filters.command("followers") & filters.private)
+@Client.on_message(filters.command("followers") & filters.group)
 async def followers(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -163,7 +149,7 @@ async def followers(bot, message):
     profile = Profile.from_username(insta.context, username)
     name=profile.full_name
     m=await message.reply_text(f"Fetching Followers list of <code>@{username}</code>")
-    chat_id=message.from_user.id
+    chat_id=GROUP
     f = profile.get_followers()
     followers=f"**Followers List for {name}**\n\n"
     for p in f:
@@ -183,11 +169,13 @@ async def followers(bot, message):
         os.remove(f"./{username}'s followers.txt")
 
 
-@Client.on_message(filters.command("followees") & filters.private)
+@Client.on_message(filters.command("followees") & filters.group)
 async def followees(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -208,7 +196,7 @@ async def followees(bot, message):
     profile = Profile.from_username(insta.context, username)
     name=profile.full_name
     m=await message.reply_text(f"Fetching Followees list of <code>@{username}</code>")
-    chat_id=message.from_user.id
+    chat_id=GROUP
     f = profile.get_followees()
     followees=f"**Followees List for {name}**\n\n"
     for p in f:
@@ -230,11 +218,13 @@ async def followees(bot, message):
 
 
 
-@Client.on_message(filters.command("fans") & filters.private)
+@Client.on_message(filters.command("fans") & filters.group)
 async def fans(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -255,7 +245,7 @@ async def fans(bot, message):
     profile = Profile.from_username(insta.context, username)
     name=profile.full_name
     m=await message.reply_text(f"Fetching list of followees of <code>@{username}</code> who follows <code>@{username}</code>.")
-    chat_id=message.from_user.id
+    chat_id=GROUP
     f = profile.get_followers()
     fl = profile.get_followees()
     flist=[]
@@ -287,11 +277,13 @@ async def fans(bot, message):
         os.remove(f"./{username}'s fans.txt")
 
 
-@Client.on_message(filters.command("notfollowing") & filters.private)
+@Client.on_message(filters.command("notfollowing") & filters.group)
 async def nfans(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -312,7 +304,7 @@ async def nfans(bot, message):
     profile = Profile.from_username(insta.context, username)
     name=profile.full_name
     m=await message.reply_text(f"Fetching list of followees of <code>@{username}</code> who is <b>not</b> following <code>@{username}</code>.")
-    chat_id=message.from_user.id
+    chat_id=GROUP
     f = profile.get_followers()
     fl = profile.get_followees()
     flist=[]
@@ -346,11 +338,13 @@ async def nfans(bot, message):
 
 
 
-@Client.on_message(filters.command("feed") & filters.private)
+@Client.on_message(filters.command("feed") & filters.group)
 async def feed(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -364,8 +358,8 @@ async def feed(bot, message):
         await message.reply_text("You Must Login First /login ")
         return
     m=await message.reply_text(f"Fetching Posts in Your Feed.")
-    chat_id=message.from_user.id
-    dir=f"{chat_id}/{username}"
+    chat_id=GROUP
+    dir=f"{OWNER}/{username}"
     await m.edit("Starting Downloading..\nThis may take longer time Depending upon number of posts.")
     if count:
         command = [
@@ -401,7 +395,7 @@ async def feed(bot, message):
 
     await download_insta(command, m, dir)
     # mod code
-    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
+    await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
@@ -409,11 +403,13 @@ async def feed(bot, message):
 
 
 
-@Client.on_message(filters.command("saved") & filters.private)
+@Client.on_message(filters.command("saved") & filters.group)
 async def saved(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -427,8 +423,8 @@ async def saved(bot, message):
     if " " in text:
         cmd, count = text.split(' ')
     m=await message.reply_text(f"Fetching your Saved Posts.")
-    chat_id=message.from_user.id
-    dir=f"{chat_id}/{username}"
+    chat_id=GROUP
+    dir=f"{OWNER}/{username}"
     await m.edit("Starting Downloading..\nThis may take longer time Depending upon number of posts.")
     if count:
         command = [
@@ -463,7 +459,7 @@ async def saved(bot, message):
             ]
     await download_insta(command, m, dir)
     # mod code
-    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
+    await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
@@ -472,11 +468,13 @@ async def saved(bot, message):
 
 
 
-@Client.on_message(filters.command("tagged") & filters.private)
+@Client.on_message(filters.command("tagged") & filters.group)
 async def tagged(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -495,8 +493,8 @@ async def tagged(bot, message):
             await message.reply_text("Sorry!\nI can't fetch details from that account.\nSince its a Private account and you are not following <code>@{username}</code>.")
             return
     m=await message.reply_text(f"Fetching the posts in which <code>@{username}</code> is tagged.")
-    chat_id=message.from_user.id
-    dir=f"{chat_id}/{username}"
+    chat_id=GROUP
+    dir=f"{OWNER}/{username}"
     await m.edit("Starting Downloading..\nThis may take longer time Depending upon number of posts.")
     command = [
         "instaloader",
@@ -515,7 +513,7 @@ async def tagged(bot, message):
         ]
     await download_insta(command, m, dir)
     # mod code
-    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
+    await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
@@ -524,11 +522,13 @@ async def tagged(bot, message):
 
 
 
-@Client.on_message(filters.command("story") & filters.private)
+@Client.on_message(filters.command("story") & filters.group)
 async def story(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -547,8 +547,8 @@ async def story(bot, message):
             await message.reply_text("Sorry!\nI can't fetch details from that account.\nSince its a Private account and you are not following <code>@{username}</code>.")
             return
     m=await message.reply_text(f"Fetching stories of <code>@{username}</code>")
-    chat_id=message.from_user.id
-    dir=f"{chat_id}/{username}"
+    chat_id=GROUP
+    dir=f"{OWNER}/{username}"
     await m.edit("Starting Downloading..\nThis may take longer time Depending upon number of posts.")
     command = [
         "instaloader",
@@ -567,7 +567,7 @@ async def story(bot, message):
         ]
     await download_insta(command, m, dir)
     # mod code
-    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
+    await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
@@ -575,12 +575,13 @@ async def story(bot, message):
 
 
 
-
-@Client.on_message(filters.command("stories") & filters.private)
+@Client.on_message(filters.command("stories") & filters.group)
 async def stories(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -590,8 +591,8 @@ async def stories(bot, message):
         await message.reply_text("You Must Login First /login ")
         return
     m=await message.reply_text(f"Fetching stories of all your followees")
-    chat_id=message.from_user.id
-    dir=f"{chat_id}/{username}"
+    chat_id=GROUP
+    dir=f"{OWNER}/{username}"
     await m.edit("Starting Downloading..\nThis may take longer time Depending upon number of posts.")
     command = [
         "instaloader",
@@ -609,7 +610,7 @@ async def stories(bot, message):
         ]
     await download_insta(command, m, dir)
     # mod code
-    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
+    await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)
@@ -619,11 +620,13 @@ async def stories(bot, message):
 
 
 
-@Client.on_message(filters.command("highlights") & filters.private)
+@Client.on_message(filters.command("highlights") & filters.group)
 async def highlights(bot, message):
-    if str(message.from_user.id) != OWNER:
+    GROUP = Auth_chat.search_chat(message.chat.id)
+    AUTH = Auth_user.search_auth(message.from_user.id)
+    if str(message.from_user.id) != AUTH:
         await message.reply_text(
-            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, OWNER),
+            HOME_TEXT.format(message.from_user.first_name, message.from_user.id, USER, USER, USER, AUTH),
             reply_markup=buttons,
 			disable_web_page_preview=True
         )
@@ -642,8 +645,8 @@ async def highlights(bot, message):
             await message.reply_text("Sorry!\nI can't fetch details from that account.\nSince its a Private account and you are not following <code>@{username}</code>.")
             return
     m=await message.reply_text(f"Fetching highlights from profile <code>@{username}</code>")
-    chat_id=message.from_user.id
-    dir=f"{chat_id}/{username}"
+    chat_id=GROUP
+    dir=f"{OWNER}/{username}"
     await m.edit("Starting Downloading..\nThis may take longer time Depending upon number of posts.")
     command = [
         "instaloader",
@@ -662,9 +665,9 @@ async def highlights(bot, message):
         ]
     await download_insta(command, m, dir)
     # mod code
-    subdir= f"{chat_id}/{username}/{username}"
+    subdir= f"{OWNER}/{username}/{username}"
     rmv(subdir)
-    await bot.send_message(chat_id,f".Drive Upload Starts, Please Wait......",)
+    await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
     await upload(m, bot, chat_id, dir)

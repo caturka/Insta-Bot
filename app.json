@@ -8,7 +8,7 @@
       "download",
       "bot"
     ],
-    "repository": "https://github.com/subinps/Instagram-Bot",
+    "repository": "https://github.com/Humanpredator-Inc/Insta-Bot",
     "env": {
       "API_ID": {
         "description": "Get this value from https://my.telegram.org",
@@ -26,8 +26,20 @@
         "description": "Enter Your Telegram id",
         "value": ""
       },
+      "GROUP_ID": {
+        "description": "Enter Your Athorized Group's id. seperate by comma",
+        "value":"[]"
+      },
+      "AUTH_USER": {
+        "description":"Enter the Sudo users id. seperate by comma",
+        "value":"[]"
+      },
       "INSTAGRAM_USERNAME": {
         "description": "Enter your Instagram Username without @ , Example: samantharuthprabhuoffl",
+        "value": ""
+      },
+      "DRIVE_ID": {
+        "description": "Enter Your Google Drive id",
         "value": ""
       },
       "INSTA_SESSIONFILE_ID": {
