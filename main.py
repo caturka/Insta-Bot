@@ -2,6 +2,10 @@ from pyrogram.raw import functions, types
 from pyrogram import Client, idle
 from pyromod import listen
 from config import Config
+import os
+
+os.system('clear')
+
 STATUS=Config.STATUS
 
 USER=Config.USER

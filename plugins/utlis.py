@@ -13,15 +13,12 @@ GROUP=Config.GROUP
 AUTH=Config.AUTH
 HOME_TEXT=Config.HOME_TEXT
 HELP=Config.HELP
-session=f"./{USER}"
-
 STATUS=Config.STATUS
-
 insta = Config.L
 
+session=f"./{USER}"
 
 @Client.on_message(filters.command("account") & filters.group)
-
 async def account(bot, message):
     GROUP = Auth_chat.search_chat(message.chat.id)
     AUTH = Auth_user.search_auth(message.from_user.id)

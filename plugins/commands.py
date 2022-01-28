@@ -6,6 +6,8 @@ import sys
 import os
 from helper.drive_utils.gdrive import *
 from helper.authorize import *
+from pydrive.auth import GoogleAuth
+from pathlib import Path
 
 USER=Config.USER
 OWNER=Config.OWNER

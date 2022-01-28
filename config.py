@@ -3,12 +3,12 @@ from instaloader import Instaloader
 
 
 class Config:
-    API_ID = int(os.environ.get("API_ID", "3544387"))
-    API_HASH = os.environ.get("API_HASH", "fbd3a125cd615e8bcb680718bfdbe528")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "1958306897:AAHTKYmipeugow847DEeLIJiFf9vtZs-sC0") 
+    API_ID = int(os.environ.get("API_ID", ""))
+    API_HASH = os.environ.get("API_HASH", "")
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "") 
     USER = os.environ.get("INSTAGRAM_USERNAME", "")
-    GROUP= os.environ.get("GROUP_ID", "")
-    AUTH = os.environ.get("AUTH_USER", "")
+    GROUP= os.environ.get("GROUP_ID", "[]")
+    AUTH = os.environ.get("AUTH_USER", "[]")
     OWNER = os.environ.get("OWNER_ID", "")
     DRIVE= os.environ.get("DRIVE_ID", "")
     INSTA_SESSIONFILE_ID = os.environ.get("INSTA_SESSIONFILE_ID", None)
