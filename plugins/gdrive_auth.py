@@ -1,4 +1,4 @@
-from time import time
+import time 
 from pyrogram import *
 from config import Config
 from pyrogram import Client, filters
