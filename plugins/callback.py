@@ -112,7 +112,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         gid = None
         gid = gup(dir,gid)
         await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
-        if TUP==True:
+        if TUP == 'True':
             await upload(m, bot, chat_id, dir)
         else:
             pass
@@ -154,7 +154,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         gid = None
         gid = gup(dir,gid)
         await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
-        if TUP==True:
+        if TUP == 'True':
             await upload(m, bot, chat_id, dir)
         else:
             pass
@@ -203,7 +203,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         gid = None
         gid = gup(dir,gid)
         await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
-        if TUP==True:
+        if TUP == 'True':
             await upload(m, bot, chat_id, dir)
         else:
             pass
@@ -378,7 +378,7 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         gid = None
         gid = gup(dir,gid)
         await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
-        if TUP==True:
+        if TUP == 'True':
             await upload(m, bot, chat_id, dir)
         else:
             pass

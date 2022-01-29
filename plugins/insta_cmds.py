@@ -400,7 +400,7 @@ async def feed(bot, message):
     gid = None
     gid = gup(dir,gid)
     await  bot.send_message(GROUP,f'The Drive Link: {gid}')
-    if TUP==True:
+    if TUP == 'True':
         await upload(m, bot, chat_id, dir)
     else:
         pass
@@ -468,7 +468,7 @@ async def saved(bot, message):
     gid = None
     gid = gup(dir,gid)
     await  bot.send_message(GROUP,f'The Drive Link: {gid}')
-    if TUP==True:
+    if TUP == 'True':
         await upload(m, bot, chat_id, dir)
     else:
         pass
@@ -525,7 +525,7 @@ async def tagged(bot, message):
     gid = None
     gid = gup(dir,gid)
     await  bot.send_message(GROUP,f'The Drive Link: {gid}')
-    if TUP==True:
+    if TUP == 'True':
         await upload(m, bot, chat_id, dir)
     else:
         pass
@@ -582,7 +582,7 @@ async def story(bot, message):
     gid = None
     gid = gup(dir,gid)
     await  bot.send_message(GROUP,f'The Drive Link: {gid}')
-    if TUP==True:
+    if TUP == 'True':
         await upload(m, bot, chat_id, dir)
     else:
         pass
@@ -628,7 +628,7 @@ async def stories(bot, message):
     gid = None
     gid = gup(dir,gid)
     await  bot.send_message(GROUP,f'The Drive Link: {gid}')
-    if TUP==True:
+    if TUP == 'True':
         await upload(m, bot, chat_id, dir)
     else:
         pass
@@ -688,7 +688,7 @@ async def highlights(bot, message):
     gid = None
     gid = gup(dir,gid)
     await  bot.send_message(GROUP,f'The Drive Link: {gid}')
-    if TUP==True:
+    if TUP == 'True':
         await upload(m, bot, chat_id, dir)
     else:
         pass
