@@ -1,3 +1,4 @@
+from time import time
 from pyrogram import *
 from config import Config
 from pyrogram import Client, filters
@@ -6,7 +7,7 @@ from pydrive.drive import GoogleDrive
 from pydrive import *
 from os import path
 
-from helper.drive_utils.gdrive import DRIVE
+DRIVE=Config.DRIVE
 
 OWNER=Config.OWNER
 gauth = GoogleAuth()
@@ -42,8 +43,8 @@ async def code(bot, message):
         gauth.Auth(code)
         gauth.SaveCredentialsFile('credentials.json') # Save the credentials
         drive = GoogleDrive(gauth)
-        file1 = drive.CreateFile({'title': 'temp.txt'})
-        file1.Upload() # Upload the file. 
+        gfile = drive.CreateFile({'parents' : [{'id' : DRIVE}], 'title' : f'.Temp.txt{time}'}) #where the files will be uploaded
+        gfile.Upload() #upload
         await message.reply_text("Authentication Successful")        
     except:
         await message.reply_text("Invalid Code")
