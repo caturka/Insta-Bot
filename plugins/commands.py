@@ -120,5 +120,6 @@ async def stop(bot, cmd):
 		chat_id=cmd.from_user.id
 		)
 	await asyncio.sleep(2)
+	os.system('clear')
 	await msg.edit("All Processes Stopped and Restarted")
 	os.execl(sys.executable, sys.executable, *sys.argv)
