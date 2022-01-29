@@ -10,7 +10,7 @@ class Config:
     AUTH = os.environ.get("AUTH_USER", "")
     OWNER = os.environ.get("OWNER_ID", "")
     DRIVE= os.environ.get("DRIVE_ID", "")
-    TUP= os.environ.get("TG_UPLOAD", "False")
+    TUP= os.environ.get("TG_UPLOAD", "")
     INSTA_SESSIONFILE_ID = os.environ.get("INSTA_SESSIONFILE_ID", None)
     S = "0"
     STATUS = set(int(x) for x in (S).split())

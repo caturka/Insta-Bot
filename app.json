@@ -44,7 +44,7 @@
       },
       "TG_UPLOAD": {
         "description": "Enter True to TG Upload or False to not upload",
-        "value": "False"
+        "value": ""
       },
       "INSTA_SESSIONFILE_ID": {
         "description": "Read README in GitHub",
