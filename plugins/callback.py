@@ -17,6 +17,7 @@ GROUP=Config.GROUP
 STATUS=Config.STATUS
 OWNER =Config.OWNER
 AUTH = Config.AUTH
+TUP = Config.TUP
 
 insta = Config.L
 
@@ -110,8 +111,12 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
-        await upload(m, bot, chat_id, dir)
-        await bot.send_message(GROUP,f'The Drive Link: {gid}')
+        await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
+        if TUP==True:
+            await upload(m, bot, chat_id, dir)
+        else:
+            pass
+        
     
 
 
@@ -148,8 +153,12 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
-        await upload(m, bot, chat_id, dir)
-        await bot.send_message(GROUP,f'The Drive Link: {gid}')
+        await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
+        if TUP==True:
+            await upload(m, bot, chat_id, dir)
+        else:
+            pass
+        
 
     elif query.data.startswith("igtv"):
         await query.message.delete()
@@ -193,8 +202,12 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
-        await upload(m, bot, chat_id, dir)
-        await bot.send_message(GROUP,f'The Drive Link: {gid}')
+        await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
+        if TUP==True:
+            await upload(m, bot, chat_id, dir)
+        else:
+            pass
+        
 
 
 
@@ -364,7 +377,11 @@ async def cb_handler(bot: Client, query: CallbackQuery):
         await bot.send_message(GROUP,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
         gid = None
         gid = gup(dir,gid)
-        await upload(m, bot, chat_id, dir)
-        await bot.send_message(GROUP,f'The Drive Link: {gid}')
+        await  query.edit_message_text(GROUP,f'The Drive Link: {gid}')
+        if TUP==True:
+            await upload(m, bot, chat_id, dir)
+        else:
+            pass
+        
 
 

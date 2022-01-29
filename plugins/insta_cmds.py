@@ -13,6 +13,7 @@ from helper.SubFolRmv import *
 AUTH=Config.AUTH
 USER=Config.USER
 OWNER=Config.OWNER
+TUP= Config.TUP
 GROUP=Config.GROUP
 HOME_TEXT_OWNER=Config.HOME_TEXT_OWNER
 HELP=Config.HELP
@@ -398,8 +399,12 @@ async def feed(bot, message):
     await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
-    await upload(m, bot, chat_id, dir)
-    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+    await  bot.send_message(GROUP,f'The Drive Link: {gid}')
+    if TUP==True:
+        await upload(m, bot, chat_id, dir)
+    else:
+        pass
+        
 
 
 
@@ -462,8 +467,11 @@ async def saved(bot, message):
     await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
-    await upload(m, bot, chat_id, dir)
-    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+    await  bot.send_message(GROUP,f'The Drive Link: {gid}')
+    if TUP==True:
+        await upload(m, bot, chat_id, dir)
+    else:
+        pass
 
 
 
@@ -516,8 +524,11 @@ async def tagged(bot, message):
     await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
-    await upload(m, bot, chat_id, dir)
-    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+    await  bot.send_message(GROUP,f'The Drive Link: {gid}')
+    if TUP==True:
+        await upload(m, bot, chat_id, dir)
+    else:
+        pass
 
 
 
@@ -570,8 +581,11 @@ async def story(bot, message):
     await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
-    await upload(m, bot, chat_id, dir)
-    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+    await  bot.send_message(GROUP,f'The Drive Link: {gid}')
+    if TUP==True:
+        await upload(m, bot, chat_id, dir)
+    else:
+        pass
 
 
 
@@ -613,8 +627,11 @@ async def stories(bot, message):
     await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
-    await upload(m, bot, chat_id, dir)
-    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+    await  bot.send_message(GROUP,f'The Drive Link: {gid}')
+    if TUP==True:
+        await upload(m, bot, chat_id, dir)
+    else:
+        pass
 
 
 
@@ -670,5 +687,8 @@ async def highlights(bot, message):
     await bot.send_message(chat_id,f"Drive Upload Starts, Please Wait....!\nThis may take longer time Depending upon number of posts.")
     gid = None
     gid = gup(dir,gid)
-    await upload(m, bot, chat_id, dir)
-    await bot.send_message(chat_id,f'The Drive Link: {gid}')
+    await  bot.send_message(GROUP,f'The Drive Link: {gid}')
+    if TUP==True:
+        await upload(m, bot, chat_id, dir)
+    else:
+        pass

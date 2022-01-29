@@ -13,6 +13,7 @@ GROUP=Config.GROUP
 AUTH=Config.AUTH
 HOME_TEXT=Config.HOME_TEXT
 HELP=Config.HELP
+TUP= Config.TUP
 STATUS=Config.STATUS
 insta = Config.L
 
@@ -174,8 +175,14 @@ async def ig(bot, message):
                 "--", f"-{shortcode}"
                 ]
             await download_insta(command, sent, dir)
-            gup(dir)
-            await upload(sent, bot, chat_id, dir)
+            gid =None
+            gid = gup(dir,gid)
+            await bot.send_message(GROUP,f'The Drive Link: {gid}')
+            if TUP==True:
+                await upload(m, bot, chat_id, dir)
+            else:
+                pass
+
         except Exception as e:
             print(e)
             await bot.send_message(chat_id=GROUP, text=e)
