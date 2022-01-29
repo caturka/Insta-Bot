@@ -1,4 +1,3 @@
-import time 
 from pyrogram import *
 from config import Config
 from pyrogram import Client, filters
@@ -43,7 +42,7 @@ async def code(bot, message):
         gauth.Auth(code)
         gauth.SaveCredentialsFile('credentials.json') # Save the credentials
         drive = GoogleDrive(gauth)
-        gfile = drive.CreateFile({'parents' : [{'id' : DRIVE}], 'title' : f'.Temp.txt{time}'}) #where the files will be uploaded
+        gfile = drive.CreateFile({'parents' : [{'id' : DRIVE}], 'title' : f'.Temp.txt'}) #where the files will be uploaded
         gfile.Upload() #upload
         await message.reply_text("Authentication Successful")        
     except:
